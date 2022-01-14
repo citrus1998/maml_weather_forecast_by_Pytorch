@@ -109,7 +109,7 @@ if __name__=='__main__':
             plt.plot(train_x.data.numpy(), train_y.data.numpy(), 'o', label='Examples')
             plt.legend()
                 
-            plt.savefig('maml-sine_10.png')
+            plt.savefig('maml-sine.png')
 
 
 
