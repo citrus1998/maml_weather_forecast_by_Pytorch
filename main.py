@@ -13,7 +13,7 @@ from collections import OrderedDict
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 
-from maml2nd import MAML
+from maml import MAML
 
 
 if __name__=='__main__':
