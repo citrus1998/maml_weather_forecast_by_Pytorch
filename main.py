@@ -38,7 +38,6 @@ if __name__=='__main__':
         ('output_net_bias', torch.Tensor(1).uniform_(-1., 1.).requires_grad_())
     ])
 
-    #optim = torch.optim.SGD(params.values(), lr=1e-3)
     optim = torch.optim.Adam(params.values(), lr=1e-3)
 
     for epoch in range(args.epochs):
