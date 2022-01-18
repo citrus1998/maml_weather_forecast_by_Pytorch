@@ -1,4 +1,5 @@
 import argparse
+from email.mime import image
 import math
 import random
 import datetime
@@ -12,11 +13,12 @@ import torch.optim
 
 from collections import OrderedDict
 
-import matplotlib as mpl
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
 
 from maml import MAML
 from generate_dataset import DataGenerator
+from generate_graph import GraphGenerator
 
 
 if __name__=='__main__':
@@ -26,12 +28,16 @@ if __name__=='__main__':
     parser.add_argument('--alpha', type=float, default=1e-2) 
     parser.add_argument('--epochs', type=int, default=1) 
     parser.add_argument('--update_batch_size', type=int, default=5)
-    parser.add_argument('--meta_batch_size', type=int, default=25) 
+    parser.add_argument('--meta_batch_size', type=int, default=25)
 
     args = parser.parse_args() 
 
+    d_now = datetime.datetime.now()
+
     datasets = DataGenerator(args.update_batch_size * 2, args.meta_batch_size)
     model = MAML()
+
+    graph = GraphGenerator()
 
     params = OrderedDict([
         ('input_net_weight', torch.Tensor(32, 1).uniform_(-1., 1.).requires_grad_()),
@@ -48,6 +54,8 @@ if __name__=='__main__':
 
     for epoch in range(args.epochs):
         
+        imgs = []
+
         ''' Train Phase '''
         model.train()
 
@@ -92,6 +100,13 @@ if __name__=='__main__':
 
             if itr % 100 == 0: 
                 print('Iteration %d -- Outer Loss: %.4f' % (itr, val_loss))
+            
+            if itr % 1000 == 0:
+                val_label_scatter, val_pred_scatter, train_label_scatter = graph.plot_weather_temp_train(train_x.detach().numpy(), train_y.detach().numpy(), val_x.detach().numpy(), val_y.detach().numpy(), pred_val_y.detach().numpy())
+                imgs.append([val_label_scatter, val_pred_scatter, train_label_scatter])
+        
+        print(imgs)
+        graph.gif_generator(imgs, d_now)
 
         ''' Test Phase '''
         model.eval()
@@ -126,12 +141,7 @@ if __name__=='__main__':
                 
             test_pred_y = model(test_x, new_params)
 
-            plt.plot(test_x.data.numpy(), test_y.data.numpy(), label='sin(x)')
-            plt.plot(test_x.data.numpy(), test_pred_y.data.numpy(), label='net(x)')
-            plt.plot(train_x.data.numpy(), train_y.data.numpy(), 'o', label='Examples')
-            plt.legend()
-                
-            plt.savefig('maml-sine.png')
+            graph.plot_weather_temp_test(train_x.data.numpy(), train_y.data.numpy(), test_x.data.numpy(), test_y.data.numpy(), test_pred_y.data.numpy(), d_now)
 
 
 
