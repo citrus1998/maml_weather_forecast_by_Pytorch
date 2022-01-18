@@ -104,7 +104,6 @@ if __name__=='__main__':
                 val_label_scatter, val_pred_scatter, train_label_scatter = graph.plot_weather_temp_train(train_x.detach().numpy(), train_y.detach().numpy(), val_x.detach().numpy(), val_y.detach().numpy(), pred_val_y.detach().numpy())
                 imgs.append([val_label_scatter, val_pred_scatter, train_label_scatter])
         
-        print(imgs)
         graph.gif_generator(imgs, d_now)
 
         ''' Test Phase '''
