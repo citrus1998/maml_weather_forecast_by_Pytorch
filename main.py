@@ -1,5 +1,4 @@
 import argparse
-from email.mime import image
 import math
 import random
 import datetime
