@@ -54,6 +54,7 @@ if __name__=='__main__':
     for epoch in range(args.epochs):
         
         imgs = []
+        losses_train = []
 
         ''' Train Phase '''
         model.train()
@@ -100,9 +101,9 @@ if __name__=='__main__':
             if itr % 100 == 0: 
                 print('Iteration %d -- Outer Loss: %.4f' % (itr, val_loss))
             
-            if itr % 1000 == 0:
-                val_label_scatter, val_pred_scatter, train_label_scatter = graph.plot_weather_temp_train(train_x.detach().numpy(), train_y.detach().numpy(), val_x.detach().numpy(), val_y.detach().numpy(), pred_val_y.detach().numpy())
-                imgs.append([val_label_scatter, val_pred_scatter, train_label_scatter])
+            losses_train.append(val_loss)
+            val_label_scatter, val_pred_scatter, train_label_scatter = graph.plot_weather_temp_train(train_x.detach().numpy(), train_y.detach().numpy(), val_x.detach().numpy(), val_y.detach().numpy(), pred_val_y.detach().numpy())
+            imgs.append([val_label_scatter, val_pred_scatter, train_label_scatter])
         
         graph.gif_generator(imgs, d_now)
 

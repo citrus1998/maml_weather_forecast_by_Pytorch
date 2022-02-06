@@ -23,8 +23,8 @@ class DataGenerator(object):
 
     def generate_weather_temperature_batch(self, train=True, input_idx=None):
         # set up input conditions
-        csv_name = "data/tokyo_temp_191801-196712.csv"
-        # csv_name = "data/tokyo_temp_196801-201712.csv"
+        #csv_name = "data/tokyo_temp_191801-196712.csv"
+        csv_name = "data/tokyo_temp_196801-201712.csv"
 
         # load csv file
         temp_data = np.genfromtxt(csv_name, delimiter=',')
